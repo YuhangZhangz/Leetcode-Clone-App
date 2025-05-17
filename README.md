@@ -65,6 +65,7 @@ This project is for educational purposes only.
 
 ### 📺 Learning Video
 
-[![Watch the video](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+[Watch the video](https://www.youtube.com/watch?v=GnodscC2p-A&t=1125s)
+
 
 > Click the image above to watch the walkthrough or tutorial video for this project.
