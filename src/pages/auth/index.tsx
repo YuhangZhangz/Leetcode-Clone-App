@@ -1,10 +1,12 @@
-import React from 'react';
-import Navbar from '@/components/Navbar/Navbar';
+import { authModalState } from '@/atoms/authModalAtom';
 import AuthModal from '@/components/Modals/AuthModal';
+import Navbar from '@/components/Navbar/Navbar';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 type indexProps = {};
 
 const index:React.FC<indexProps> = () => {
-    
+    const authModal = useRecoilValue(authModalState)
     return (
     <>
     {/* auth page */}
@@ -15,9 +17,9 @@ const index:React.FC<indexProps> = () => {
             <div className='flex items-center justify-center h-[calc(100vh-5rem)] pointer-events-none select-none '>
                 <img src="/hero.png" alt="Hero Image" />
             </div>
-            <AuthModal />
+            {authModal.isOpen && <AuthModal />}
         </div>
-    </div>;
+    </div>
     </>
     )
 };

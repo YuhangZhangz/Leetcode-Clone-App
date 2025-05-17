@@ -1,12 +1,20 @@
 import React from 'react';
 import Link from "next/link";
+import { useSetRecoilState } from 'recoil';
+import { authModalState } from '@/atoms/authModalAtom';
 
 type NavbarProps = {
     
 };
 
 const Navbar:React.FC<NavbarProps> = () => {
-    
+    const setAuthModalState = useSetRecoilState(authModalState)
+    const handleClick = () => {
+        setAuthModalState((prev) => ({
+            ...prev,
+            isOpen: true,
+        }));
+    };
     return (
         <>
         {/* authpage bar */}
@@ -18,7 +26,8 @@ const Navbar:React.FC<NavbarProps> = () => {
                 <button
                 className=" bg-black text-white px-2 py-1 sm:px-4 rounded-md text-sm font-medium
                 hover:text-black hover:bg-white hover:border-2 hover:border-black birder-2 border-transparent
-                transition duration-300 ease-in-out">
+                transition duration-300 ease-in-out"
+                onClick={handleClick}>
                 Sign In
                 </button>
             </div>
