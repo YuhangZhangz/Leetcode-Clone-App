@@ -8,6 +8,8 @@ type NavbarProps = {
 const Navbar:React.FC<NavbarProps> = () => {
     
     return (
+        <>
+        {/* authpage bar */}
         <div className="flex items-center justify-between sm:px-12 px-2 md:px-24">
             <Link href="/" className="flex items-center justify-center h-20">
             <img src="/logo.png" alt="LeetClone" className="h-full" />
@@ -21,6 +23,7 @@ const Navbar:React.FC<NavbarProps> = () => {
                 </button>
             </div>
         </div>
+        </>
 );
 
 }
