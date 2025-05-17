@@ -1,14 +1,30 @@
-import React from 'react';
-
+import React,{useEffect, useState} from 'react';
+import { auth } from '@/firebase/firebase';
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+import { send } from 'process';
+import { toast } from 'react-toastify';
 type ResetPasswordProps = {
     
 };
 
 const ResetPassword:React.FC<ResetPasswordProps> = () => {
-    
+      const [email, setEmail] = useState('');
+  	const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
+	const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const success = await sendPasswordResetEmail(email);
+          if (success) {
+            toast.success('If this email is registered, a reset link has been sent.',{position: "top-center", autoClose: 3000,theme:"dark"});
+          }
+	};
+	useEffect(()=>{
+		if (error) {
+			toast.error(error.message,{position: "top-center", autoClose: 3000,theme:"dark"});
+		}
+	})
     return (
         <>
-        <form className='space-y-6 px-6 lg:px-8 pb-4 sm:pb-6 xl:pb-8'>
+        <form className='space-y-6 px-6 lg:px-8 pb-4 sm:pb-6 xl:pb-8' onSubmit={handleReset}>
             {/* Reset password title field */}
             <h3 className='text-xl font-medium  text-white'>Reset Password</h3>
             {/* Reset password description field */}
@@ -24,6 +40,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = () => {
 				<input
 					type='email'
 					name='email'
+					onChange={(e) => setEmail(e.target.value)}
 					id='email'
 					className='border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white'
 					placeholder='name@company.com'
