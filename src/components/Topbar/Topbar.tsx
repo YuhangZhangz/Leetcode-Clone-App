@@ -6,15 +6,23 @@ import Image from "next/image";
 import Logout from "../Buttons/Logout";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
-type TopbarProps = {};
+import { FaChevronLeft } from "react-icons/fa";
+import { BsList } from "react-icons/bs";
+import { useRouter } from "next/router";
+import { FaChevronRight } from "react-icons/fa";
+import Timer from "../Timer/Timer";
+type TopbarProps = {
+  problemPage?: boolean;
+};
 
-const Topbar: React.FC<TopbarProps> = () => {
+const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
+  const router = useRouter();
+
   return (
     <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-gray-900 text-gray-700">
-      <div className="flex w-full items-center justify-between max-w-[1200px] mx-auto">
-        
+      <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
         {/* Logo - redirects to homepage */}
         <Link href="/">
           <div className="h-[22px] flex-1">
@@ -22,9 +30,31 @@ const Topbar: React.FC<TopbarProps> = () => {
           </div>
         </Link>
 
+        {/* Center - Problem List with left arrow */}
+        {problemPage && (
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2">
+            <div
+              className="flex items-center justify-center rounded bg-gray-700 hover:bg-gray-600 h-8 w-8 cursor-pointer"
+              onClick={() => router.back()}
+            >
+              <FaChevronLeft className="text-white" />
+            </div>
+            <Link href="/" className="flex items-center gap-2 font-semibold text-base max-w-[170px] text-white cursor-pointer">
+              <BsList />
+              <p>Problem List</p>
+            </Link>
+            <div>
+              <div
+                className="flex items-center justify-center rounded bg-gray-700 hover:bg-gray-600 h-8 w-8 cursor-pointer"
+              >
+                <FaChevronRight className="text-white" />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Right-side buttons */}
         <div className="flex items-center space-x-4 flex-1 justify-end">
-          
           {/* Premium link button */}
           <div>
             <a
@@ -36,10 +66,10 @@ const Topbar: React.FC<TopbarProps> = () => {
               Premium
             </a>
           </div>
-          
+          {problemPage && <Timer />}
           {!user && (
             <Link href="/auth" onClick={() => {
-              setAuthModalState((prev) => ({...prev, isOpen: true, type: "login" }));
+              setAuthModalState((prev) => ({ ...prev, isOpen: true, type: "login" }));
             }}>
               <button className="bg-gray-600 py-1 px-2 cursor-pointer rounded border border-black hover:bg-gray-300 text-white">
                 Sign In
