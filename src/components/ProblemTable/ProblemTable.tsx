@@ -63,11 +63,11 @@ const ProblemsTable: React.FC<ProblemsTableProps> = () => {
 
               {/* Solution link or placeholder */}
               <td className="px-6 py-4">
-                {doc.videoId ? (
+                {doc.videoId && doc.videoId.length > 0 ? (
                   <AiFillYoutube
                     fontSize={30}
                     className="cursor-pointer hover:text-red-600"
-                    onClick={() => handleOpenModal(doc.videoId)}
+                    onClick={() => handleOpenModal(doc.videoId!)}
                   />
                 ) : (
                   <p className="text-gray-400">No Video Available</p>
