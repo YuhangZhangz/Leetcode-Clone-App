@@ -72,7 +72,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
           >
             Premium
           </a>
-          {problemPage && <Timer />}
+          {user && problemPage && <Timer />}
           {!user ? (
             <Link
               href="/auth"
