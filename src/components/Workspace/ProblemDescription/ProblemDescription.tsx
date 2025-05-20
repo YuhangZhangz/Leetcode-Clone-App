@@ -13,9 +13,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {toast} from "react-toastify"
 type ProblemDescriptionProps = {
   problem: Problem;
+  _solved: boolean
 };
 
-const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
+const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solved}) => {
   const { currentProblem, loading, problemDifficultyClass, setCurrentProblem } = useGetcurrentProblem(problem.id);
 	const [user] = useAuthState(auth);
   const [youtubePlayer, setYoutubePlayer] = useState<{ isOpen: boolean; videoId: string }>({ isOpen: false, videoId: '' });
@@ -169,7 +170,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
               <div className={`${problemDifficultyClass} inline-block rounded-[21px] px-2.5 py-1 text-xs font-medium capitalize`}>
                 {currentProblem.difficulty}
               </div>
-              {solved && (
+              {(solved || _solved) && (
                 <div className="rounded p-[3px] ml-4 text-lg text-green-500">
                   <BsCheck2Circle />
                 </div>

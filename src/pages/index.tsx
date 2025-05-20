@@ -36,6 +36,7 @@ export default function Home() {
   }*/}
   const[loadingProblems, setLoadingProblems] = useState(true);
   const hasMounted = useHasMounted();
+  
   if(!hasMounted) return null;
   
   return (
