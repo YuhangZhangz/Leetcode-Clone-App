@@ -169,9 +169,13 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
               <div className={`${problemDifficultyClass} inline-block rounded-[21px] px-2.5 py-1 text-xs font-medium capitalize`}>
                 {currentProblem.difficulty}
               </div>
-              <div className="rounded p-[3px] ml-4 text-lg text-green-500">
-                <BsCheck2Circle />
-              </div>
+              {solved && (
+                <div className="rounded p-[3px] ml-4 text-lg text-green-500">
+                  <BsCheck2Circle />
+                </div>
+              )
+
+              }
               <div className="flex items-center cursor-pointer hover:bg-gray-600 space-x-1 rounded p-[3px] ml-4 text-lg text-gray-300"
                 onClick={handleLike}
               >

@@ -11,6 +11,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { BsList } from "react-icons/bs";
 import { useRouter } from "next/router";
 import Timer from "../Timer/Timer";
+import { problems } from "@/utils/problems";
+import { Problem } from "@/utils/types/problem";
 
 
 type TopbarProps = {
@@ -20,8 +22,26 @@ type TopbarProps = {
 const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
+  const router = useRouter();
 
+	const handleProblemChange = (isForward: boolean) => {
+		const { order } = problems[router.query.pid as string] as Problem;
+		const direction = isForward ? 1 : -1;
+		const nextProblemOrder = order + direction;
+		const nextProblemKey = Object.keys(problems).find((key) => problems[key].order === nextProblemOrder);
 
+		if (isForward && !nextProblemKey) {
+			const firstProblemKey = Object.keys(problems).find((key) => problems[key].order === 1);
+			router.push(`/problems/${firstProblemKey}`);
+		} else if (!isForward && !nextProblemKey) {
+			const lastProblemKey = Object.keys(problems).find(
+				(key) => problems[key].order === Object.keys(problems).length
+			);
+			router.push(`/problems/${lastProblemKey}`);
+		} else {
+			router.push(`/problems/${nextProblemKey}`);
+		}
+	};
   return (
     <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-gray-900 text-gray-700">
       <div
@@ -41,7 +61,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2">
             <div
               className="flex items-center justify-center rounded bg-gray-700 hover:bg-gray-600 h-8 w-8 cursor-pointer"
-              
+              onClick={() => handleProblemChange(false)}
             >
               <FaChevronLeft className="text-white" />
             </div>
@@ -54,7 +74,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
             </Link>
             <div
               className="flex items-center justify-center rounded bg-gray-700 hover:bg-gray-600 h-8 w-8 cursor-pointer"
-              
+              onClick={() => handleProblemChange(true)}
             >
               <FaChevronRight className="text-white" />
             </div>
