@@ -1,10 +1,14 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
+import {ISettings} from '../Playground';
+import SettingsModal from "@/components/Modals/SettingsModal";
+type PreferenceNavProps = {
+  settings: ISettings;
+  setSettings: React.Dispatch<React.SetStateAction<ISettings>>
+};
 
-type PreferenceNavProps = {};
-
-const PreferenceNav: React.FC<PreferenceNavProps> = () => {
+const PreferenceNav: React.FC<PreferenceNavProps> = ({settings, setSettings}) => {
   const [isFullScreen, setIsFullScreen] = useState(false)
 
   const handleFullScreem = () => {
@@ -60,8 +64,10 @@ const PreferenceNav: React.FC<PreferenceNavProps> = () => {
           </div>
         </button>
       </div>
+      {settings.settingModalIsOpen && <SettingsModal/>}
     </div>
   );
 };
+
 
 export default PreferenceNav;

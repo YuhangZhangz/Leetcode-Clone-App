@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { problems } from '@/utils/problems';
 import { useRouter } from 'next/router';
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { RiDropdownList } from 'react-icons/ri';
 
 const Split = dynamic(() => import('react-split'), { ssr: false });
 const CodeMirror = dynamic(
@@ -25,9 +26,22 @@ type PlaygroundProps = {
   setSolved: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export interface ISettings {
+  fontSize: string;
+  settingModalIsOpen: boolean;
+  RiDropdownIsOpen: boolean;
+}
+
 const Playground: React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved}) => {
   const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
   let [userCode, setUserCode] = useState<string>(problem.starterCode);
+
+  const [settings, setSettings] = useState<ISettings>({
+    fontSize: "16px",
+    settingModalIsOpen: true,
+    RiDropdownIsOpen: false,
+  })
+
   const[user] = useAuthState(auth);
   const {query : { pid } } = useRouter();
   const handleSubmit = async () => {
@@ -98,7 +112,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved})
   }
   return (
     <div className="flex flex-col bg-neutral-800 relative">
-      <PreferenceNav />
+      <PreferenceNav settings={settings} setSettings = {setSettings}/>
 
       <Split
         className="h-[calc(100vh-94px)]"
@@ -112,7 +126,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved})
             theme={vscodeDark}
             onChange={onChange}
             extensions={[javascript()]}
-            style={{ fontSize: 16 }}
+            style={{ fontSize: settings.fontSize }}
           />
         </div>
 
