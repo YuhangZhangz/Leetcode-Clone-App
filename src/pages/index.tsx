@@ -1,6 +1,7 @@
 import ProblemTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
 import { firestore } from "@/firebase/firebase";
+import useHasMounted from "@/hooks/useHasMounted";
 // use to add data to the database
 // import firebase from "firebase/compat/app";
 // import { doc, setDoc } from "firebase/firestore";
@@ -33,7 +34,10 @@ export default function Home() {
     await setDoc(doc(firestore, "problems", inputs.id), newProblem);
     alert("Problem added to DB");
   }*/}
-  const[loadingProblems, setLoadingProblems] = useState(false);
+  const[loadingProblems, setLoadingProblems] = useState(true);
+  const hasMounted = useHasMounted();
+  if(!hasMounted) return null;
+  
   return (
     <>
       <main className="bg-[#202124] min-h-screen"> 
