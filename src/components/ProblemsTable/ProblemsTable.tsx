@@ -1,17 +1,22 @@
-import { problems } from "@/mockProblems/problem";
+import { orderBy } from "firebase/firestore";
 import Link from "next/link";
 import React, { useState } from "react";
 import { AiFillYoutube } from "react-icons/ai";
 import { BsCheckCircle } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import YouTube from "react-youtube";
+import { useEffect } from "react";
+import { collection, query, getDocs} from "firebase/firestore";
+import {firestore} from "../../firebase/firebase";
+import { DBProblem } from "@/utils/types/problem";
+type ProblemsTableProps = {
+  setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-type ProblemsTableProps = {};
-
-const ProblemsTable: React.FC<ProblemsTableProps> = () => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
-
+  const problems = useGetProblems(setLoadingProblems);
   const handleOpenModal = (videoId: string) => {
     setCurrentVideoId(videoId);
     setShowModal(true);
@@ -25,17 +30,17 @@ const ProblemsTable: React.FC<ProblemsTableProps> = () => {
   return (
     <>
       <tbody className="text-white">
-        {problems.map((doc, idx) => {
+        {problems.map((problem, idx) => {
           const difficultyColor =
-            doc.difficulty === "Easy"
+            problem.difficulty === "Easy"
               ? "text-green-500"
-              : doc.difficulty === "Medium"
+              : problem.difficulty === "Medium"
               ? "text-yellow-500"
               : "text-pink-500";
 
           return (
             <tr
-              key={doc.id}
+              key={problem.id}
               className={`${idx % 2 === 1 ? "bg-gray-800" : ""}`}
             >
               {/* Status icon */}
@@ -47,27 +52,27 @@ const ProblemsTable: React.FC<ProblemsTableProps> = () => {
               <td className="px-6 py-4">
                 <Link
                   className="hover:text-blue-600 cursor-pointer"
-                  href={`/problems/${doc.id}`}
+                  href={`/problems/${problem.id}`}
                 >
-                  {doc.title}
+                  {problem.title}
                 </Link>
               </td>
 
               {/* Difficulty with dynamic color */}
               <td className={`px-6 py-4 ${difficultyColor}`}>
-                {doc.difficulty}
+                {problem.difficulty}
               </td>
 
               {/* Category */}
-              <td className="px-6 py-4">{doc.category}</td>
+              <td className="px-6 py-4">{problem.category}</td>
 
               {/* Solution link or placeholder */}
               <td className="px-6 py-4">
-                {doc.videoId && doc.videoId.length > 0 ? (
+                {problem.videoId && problem.videoId.length > 0 ? (
                   <AiFillYoutube
                     fontSize={30}
                     className="cursor-pointer hover:text-red-600"
-                    onClick={() => handleOpenModal(doc.videoId!)}
+                    onClick={() => handleOpenModal(problem.videoId!)}
                   />
                 ) : (
                   <p className="text-gray-400">No Video Available</p>
@@ -112,3 +117,27 @@ const ProblemsTable: React.FC<ProblemsTableProps> = () => {
 };
 
 export default ProblemsTable;
+
+
+function useGetProblems(setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>) {
+  const [problems, setProblems] = useState<DBProblem[]>([]);
+  useEffect(() => {
+    const getProblems = async () => {
+      setLoadingProblems(true);
+      const q = query(collection(firestore, "problems"), orderBy("order", "asc"));
+      const querySnapshot = await getDocs(q);
+      const tmp: DBProblem[] = [];
+
+      querySnapshot.forEach((doc) => {
+        tmp.push({id:doc.id, ...doc.data()} as DBProblem);
+      });
+      setProblems(tmp);
+      setLoadingProblems(false);
+      
+    };
+
+    getProblems();
+  }, [setLoadingProblems]);
+  // Return the problems array
+  return problems;
+}
