@@ -50,12 +50,19 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 
               {/* Title with link */}
               <td className="px-6 py-4">
-                <Link
+                {problem.link ? (
+                <Link href={problem.link} className="hover:text-blue-600 cursor-pointer" target="_blank">
+                  {problem.title}
+                  </Link>
+                
+                ):(
+                  <Link
                   className="hover:text-blue-600 cursor-pointer"
                   href={`/problems/${problem.id}`}
                 >
                   {problem.title}
                 </Link>
+                )}
               </td>
 
               {/* Difficulty with dynamic color */}
