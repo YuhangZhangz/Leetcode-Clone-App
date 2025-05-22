@@ -5,8 +5,7 @@ import Signup from './Signup';
 import ResetPassword from './ResetPassword';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
-type AuthModalProps = {};
-const AuthModal: React.FC<AuthModalProps> = () => {
+const AuthModal: React.FC = () => {
   const authModal = useRecoilValue(authModalState);
   const closeModal = useCloseModel();
   return (
@@ -45,7 +44,7 @@ function useCloseModel() {
     };
     window.addEventListener("keydown", handleEsc);
     return () =>  window.removeEventListener("keydown", handleEsc);
-  }, []);
+  }, [closeModal]);
 
   return closeModal
 }

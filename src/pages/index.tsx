@@ -1,6 +1,5 @@
 import ProblemTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
-import { firestore } from "@/firebase/firebase";
 import useHasMounted from "@/hooks/useHasMounted";
 // use to add data to the database
 // import firebase from "firebase/compat/app";
