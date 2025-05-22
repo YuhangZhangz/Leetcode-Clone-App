@@ -13,7 +13,6 @@ const initialAuthModalState: AuthModalState = {
 
 const GLOBAL_KEY = '__authModalState__' as const;
 
-// 只在这里声明字面量属性
 declare global {
   interface GlobalThis {
     __authModalState__: ReturnType<typeof atom<AuthModalState>>;
@@ -21,8 +20,8 @@ declare global {
 }
 
 export const authModalState: ReturnType<typeof atom<AuthModalState>> = (() => {
-  // 用 `as any` 绕过编译器对索引签名的限制
-  const g = globalThis as any;
+  // 先 cast 到 unknown，再 cast 到我们声明的 GlobalThis
+  const g = (globalThis as unknown) as GlobalThis;
   if (!g[GLOBAL_KEY]) {
     const newAtom = atom<AuthModalState>({
       key: 'authModalState',
