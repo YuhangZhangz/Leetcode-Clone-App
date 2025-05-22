@@ -11,17 +11,18 @@ const initialAuthModalState: AuthModalState = {
   type: 'login',
 };
 
-// 在 globalThis 上用一个唯一的属性存储 Atom
+// 这个常量仅用于访问，不参与类型声明
 const GLOBAL_KEY = '__authModalState__' as const;
 
 declare global {
   interface GlobalThis {
-    [GLOBAL_KEY]: ReturnType<typeof atom<AuthModalState>>;
+    // 在这里直接声明字面量属性
+    __authModalState__: ReturnType<typeof atom<AuthModalState>>;
   }
 }
 
 export const authModalState: ReturnType<typeof atom<AuthModalState>> =
-  // 如果已经存在，就复用；否则新建并挂到 globalThis
+  // 下面两个位置都用 GLOBAL_KEY
   globalThis[GLOBAL_KEY] ?? (() => {
     const newAtom = atom<AuthModalState>({
       key: 'authModalState',
