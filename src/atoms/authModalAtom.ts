@@ -11,23 +11,25 @@ const initialAuthModalState: AuthModalState = {
   type: 'login',
 };
 
-// 这个常量仅用于访问，不参与类型声明
 const GLOBAL_KEY = '__authModalState__' as const;
 
+// 只在这里声明字面量属性
 declare global {
   interface GlobalThis {
-    // 在这里直接声明字面量属性
     __authModalState__: ReturnType<typeof atom<AuthModalState>>;
   }
 }
 
-export const authModalState: ReturnType<typeof atom<AuthModalState>> =
-  // 下面两个位置都用 GLOBAL_KEY
-  globalThis[GLOBAL_KEY] ?? (() => {
+export const authModalState: ReturnType<typeof atom<AuthModalState>> = (() => {
+  // 用 `as any` 绕过编译器对索引签名的限制
+  const g = globalThis as any;
+  if (!g[GLOBAL_KEY]) {
     const newAtom = atom<AuthModalState>({
       key: 'authModalState',
       default: initialAuthModalState,
     });
-    globalThis[GLOBAL_KEY] = newAtom;
+    g[GLOBAL_KEY] = newAtom;
     return newAtom;
-  })();
+  }
+  return g[GLOBAL_KEY];
+})();
