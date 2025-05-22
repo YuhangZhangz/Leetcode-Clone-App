@@ -14,7 +14,6 @@ import Timer from "../Timer/Timer";
 import { problems } from "@/utils/problems";
 import { Problem } from "@/utils/types/problem";
 
-
 type TopbarProps = {
   problemPage?: boolean;
 };
@@ -24,24 +23,29 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter();
 
-	const handleProblemChange = (isForward: boolean) => {
-		const { order } = problems[router.query.pid as string] as Problem;
-		const direction = isForward ? 1 : -1;
-		const nextProblemOrder = order + direction;
-		const nextProblemKey = Object.keys(problems).find((key) => problems[key].order === nextProblemOrder);
+  const handleProblemChange = (isForward: boolean) => {
+    const { order } = problems[router.query.pid as string] as Problem;
+    const direction = isForward ? 1 : -1;
+    const nextProblemOrder = order + direction;
+    const nextProblemKey = Object.keys(problems).find(
+      (key) => problems[key].order === nextProblemOrder
+    );
 
-		if (isForward && !nextProblemKey) {
-			const firstProblemKey = Object.keys(problems).find((key) => problems[key].order === 1);
-			router.push(`/problems/${firstProblemKey}`);
-		} else if (!isForward && !nextProblemKey) {
-			const lastProblemKey = Object.keys(problems).find(
-				(key) => problems[key].order === Object.keys(problems).length
-			);
-			router.push(`/problems/${lastProblemKey}`);
-		} else {
-			router.push(`/problems/${nextProblemKey}`);
-		}
-	};
+    if (isForward && !nextProblemKey) {
+      const firstProblemKey = Object.keys(problems).find(
+        (key) => problems[key].order === 1
+      );
+      router.push(`/problems/${firstProblemKey}`);
+    } else if (!isForward && !nextProblemKey) {
+      const lastProblemKey = Object.keys(problems).find(
+        (key) => problems[key].order === Object.keys(problems).length
+      );
+      router.push(`/problems/${lastProblemKey}`);
+    } else {
+      router.push(`/problems/${nextProblemKey}`);
+    }
+  };
+
   return (
     <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-gray-900 text-gray-700">
       <div
@@ -52,7 +56,13 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
         {/* Logo - redirects to homepage */}
         <Link href="/">
           <div className="h-[22px] flex-1">
-            <img src="/logo-full.png" alt="Logo" className="h-full" />
+            <Image
+              src="/logo-full.png"
+              alt="Logo"
+              width={100}
+              height={22}
+              className="h-full"
+            />
           </div>
         </Link>
 
@@ -119,11 +129,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                   height={30}
                   className="rounded-full"
                 />
-                <div
-                  className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-gray-800 text-orange-400 p-2 rounded shadow-lg 
-                  z-40 group-hover:scale-100 scale-0 
-                  transition-all duration-300 ease-in-out"
-                >
+                <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-gray-800 text-orange-400 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out">
                   <p className="text-sm">{user.email}</p>
                 </div>
               </div>
