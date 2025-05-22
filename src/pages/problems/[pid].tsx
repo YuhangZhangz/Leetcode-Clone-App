@@ -43,6 +43,7 @@ export async function getStaticProps({ params }: { params: { pid: string } }) {
             notFound: true,
         };
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     problem.handlerFunction = (problem.handlerFunction as Function).toString();
     return {
         props: {
