@@ -15,7 +15,7 @@ export type Problem = {
 	constraints: string;
 	order: number;
 	starterCode: string;
-	handlerFunction: ((...args: any[]) => boolean) | string;
+	handlerFunction: Function | string;
 	starterFunctionName: string;
 };
 

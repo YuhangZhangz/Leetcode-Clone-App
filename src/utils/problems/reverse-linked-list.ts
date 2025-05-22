@@ -13,6 +13,7 @@ class LinkedList {
   }
 
   reverse(): LinkedList {
+	// eslint-disable-next-line @typescript-eslint/no-this-alias
     let current: LinkedList | null = this;
     let prev: LinkedList | null = null;
     while (current !== null) {
