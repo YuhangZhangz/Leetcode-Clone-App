@@ -1,14 +1,13 @@
-import { orderBy } from "firebase/firestore";
 import Link from "next/link";
-import React, { useState } from "react";
-import { AiFillYoutube } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
 import { BsCheckCircle } from "react-icons/bs";
+import { AiFillYoutube } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import YouTube from "react-youtube";
-import { useEffect } from "react";
-import { collection, query, getDocs} from "firebase/firestore";
-import {firestore} from "../../firebase/firebase";
+import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
+import { auth, firestore } from "@/firebase/firebase";
 import { DBProblem } from "@/utils/types/problem";
+import { useAuthState } from "react-firebase-hooks/auth";
 type ProblemsTableProps = {
   setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -17,6 +16,8 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
   const [showModal, setShowModal] = useState(false);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const problems = useGetProblems(setLoadingProblems);
+  const solvedProblem = useGetsolvedProblem();
+  console.log("solvedProblem", solvedProblem)
   const handleOpenModal = (videoId: string) => {
     setCurrentVideoId(videoId);
     setShowModal(true);
@@ -45,7 +46,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
             >
               {/* Status icon */}
               <td className="px-2 py-4 font-medium whitespace-nowrap text-green-500">
-                <BsCheckCircle fontSize="18" />
+                {solvedProblem.includes(problem.id) && <BsCheckCircle fontSize="18" />}
               </td>
 
               {/* Title with link */}
@@ -147,4 +148,25 @@ function useGetProblems(setLoadingProblems: React.Dispatch<React.SetStateAction<
   }, [setLoadingProblems]);
   // Return the problems array
   return problems;
+}
+
+function useGetsolvedProblem() {
+	const [solvedProblem, setsolvedProblem] = useState<string[]>([]);
+	const [user] = useAuthState(auth);
+
+	useEffect(() => {
+		const getsolvedProblem = async () => {
+			const userRef = doc(firestore, "users", user!.uid);
+			const userDoc = await getDoc(userRef);
+
+			if (userDoc.exists()) {
+				setsolvedProblem(userDoc.data().solvedProblem);
+			}
+		};
+
+		if (user) getsolvedProblem();
+		if (!user) setsolvedProblem([]);
+	}, [user]);
+
+	return solvedProblem;
 }

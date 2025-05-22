@@ -46,7 +46,9 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({settings, setSettings}) =>
       </div>
 
       <div className="flex items-center m-2 space-x-2">
-        <button className="relative group p-2 rounded hover:bg-gray-600">
+        <button className="relative group p-2 rounded hover:bg-gray-600"
+          onClick={() => setSettings({...settings, settingModalIsOpen:true})}
+        >
           <AiOutlineSetting className="h-4 w-4 text-gray-400" />
           <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 whitespace-no-wrap bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
             Settings
@@ -64,7 +66,7 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({settings, setSettings}) =>
           </div>
         </button>
       </div>
-      {settings.settingModalIsOpen && <SettingsModal/>}
+      {settings.settingModalIsOpen && <SettingsModal settings={settings} setSettings = {setSettings}/>}
     </div>
   );
 };

@@ -13,6 +13,7 @@ import { problems } from '@/utils/problems';
 import { useRouter } from 'next/router';
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { RiDropdownList } from 'react-icons/ri';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 const Split = dynamic(() => import('react-split'), { ssr: false });
 const CodeMirror = dynamic(
@@ -29,17 +30,19 @@ type PlaygroundProps = {
 export interface ISettings {
   fontSize: string;
   settingModalIsOpen: boolean;
-  RiDropdownIsOpen: boolean;
+  dropdownIsOpen: boolean;
 }
+    
 
 const Playground: React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved}) => {
   const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
   let [userCode, setUserCode] = useState<string>(problem.starterCode);
 
+  const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
   const [settings, setSettings] = useState<ISettings>({
-    fontSize: "16px",
-    settingModalIsOpen: true,
-    RiDropdownIsOpen: false,
+    fontSize: fontSize,
+    settingModalIsOpen: false,
+    dropdownIsOpen: false,
   })
 
   const[user] = useAuthState(auth);
