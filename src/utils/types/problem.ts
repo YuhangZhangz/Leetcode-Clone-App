@@ -15,7 +15,7 @@ export type Problem = {
 	constraints: string;
 	order: number;
 	starterCode: string;
-	handlerFunction: Function | string;
+	handlerFunction: unknown;
 	starterFunctionName: string;
 };
 
