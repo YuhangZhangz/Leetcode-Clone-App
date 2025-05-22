@@ -1,6 +1,5 @@
 import assert from "assert";
 import { Problem } from "../types/problem";
-import example from "./images/reverseLL.jpg";
 
 // JS doesn't have a built in LinkedList class, so we'll create one
 class LinkedList {
@@ -100,7 +99,7 @@ export const reverseLinkedList: Problem = {
       id: 0,
       inputText: "head = [1,2,3,4,5]",
       outputText: "[5,4,3,2,1]",
-      img: example.src,
+      img: "/images/reverseLL.jpg",
     },
     {
       id: 1,
