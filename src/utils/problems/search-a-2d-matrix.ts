@@ -3,7 +3,7 @@ import { Problem } from "../types/problem";
 import example1 from "./images/search-a-2d-1.jpg";
 import example2 from "./images/search-a-2d-2.jpg";
 
-export const search2DMatrixHandler = (fn: unknown) => {
+export const search2DMatrixHandler = (fn: (matrix: number[][], target: number) => boolean) => {
   try {
     const tests = [
       {
@@ -25,8 +25,7 @@ export const search2DMatrixHandler = (fn: unknown) => {
     ];
     const answers = [true, false];
     for (let i = 0; i < tests.length; i++) {
-      // @ts-ignore
-      const result = (fn as Function)(tests[i].matrix, tests[i].target);
+      const result = fn(tests[i].matrix, tests[i].target);
       assert.deepStrictEqual(result, answers[i]);
     }
     return true;
@@ -84,8 +83,8 @@ export const search2DMatrix: Problem = {
   <li class='mt-2'><code>1 <= m, n <= 100</code></li>
   <li class='mt-2'><code>-10<sup>4</sup> <= matrix[i][j], target <= 10<sup>4</sup></code></li>
   `,
-  starterCode: starterCodeSearch2DMatrixJS,
   handlerFunction: search2DMatrixHandler,
+  starterCode: starterCodeSearch2DMatrixJS,
   starterFunctionName: "function searchMatrix",
   order: 5,
 };

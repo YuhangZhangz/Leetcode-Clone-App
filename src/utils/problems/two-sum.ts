@@ -6,7 +6,7 @@ const starterCodeTwoSum = `function twoSum(nums,target){
 };`;
 
 // checks if the user has the correct code
-const handlerTwoSum = (fn: unknown) => {
+const handlerTwoSum = (fn: (nums: number[], target: number) => number[]) => {
   try {
     const nums = [
       [2, 7, 11, 15],
@@ -23,8 +23,7 @@ const handlerTwoSum = (fn: unknown) => {
 
     // loop all tests to check if the user's code is correct
     for (let i = 0; i < nums.length; i++) {
-      // @ts-ignore
-      const result = (fn as Function)(nums[i], targets[i]);
+      const result = fn(nums[i], targets[i]);
       assert.deepStrictEqual(result, answers[i]);
     }
     return true;

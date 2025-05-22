@@ -1,20 +1,21 @@
 import assert from "assert";
 import { Problem } from "../types/problem";
 
-export const jumpGameHandler = (fn: unknown) => {
+export const jumpGameHandler = (fn: (nums: number[]) => boolean) => {
   try {
-    const tests = [
+    const tests: number[][] = [
       [2, 3, 1, 1, 4],
       [3, 2, 1, 0, 4],
       [2, 0, 0],
       [2, 5, 0, 0],
     ];
-    const answers = [true, false, true, true];
+    const answers: boolean[] = [true, false, true, true];
+
     for (let i = 0; i < tests.length; i++) {
-      // @ts-ignore
-      const result = (fn as Function)(tests[i]);
+      const result = fn(tests[i]);
       assert.strictEqual(result, answers[i]);
     }
+
     return true;
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -34,10 +35,9 @@ export const jumpGame: Problem = {
     You are given an integer array <code>nums</code>. You are initially positioned at the <strong>first index</strong>
     and each element in the array represents your maximum jump length at that position.
   </p>
-    <p class='mt-3'>
+  <p class='mt-3'>
     Return <code>true</code> if you can reach the last index, or <code>false</code> otherwise.
-    </p>`,
-
+  </p>`,
   examples: [
     {
       id: 0,
@@ -54,7 +54,7 @@ export const jumpGame: Problem = {
     },
   ],
   constraints: `<li class='mt-2'><code>1 <= nums.length <= 10^4</code></li>
-    <li class='mt-2'><code>0 <= nums[i] <= 10^5</code></li>`,
+<li class='mt-2'><code>0 <= nums[i] <= 10^5</code></li>`,
   starterCode: starterCodeJumpGameJS,
   handlerFunction: jumpGameHandler,
   starterFunctionName: "function canJump(",

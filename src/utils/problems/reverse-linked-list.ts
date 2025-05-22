@@ -25,16 +25,27 @@ class LinkedList {
   }
 }
 
-export const reverseLinkedListHandler = (fn: unknown) => {
+export const reverseLinkedListHandler = (fn: (head: LinkedList) => LinkedList) => {
   try {
-    const tests = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [1, 2, 3], [1]];
-    const answers = [[5, 4, 3, 2, 1], [1, 2, 3, 4, 5], [3, 2, 1], [1]];
+    const tests = [
+      [1, 2, 3, 4, 5],
+      [5, 4, 3, 2, 1],
+      [1, 2, 3],
+      [1],
+    ];
+    const answers = [
+      [5, 4, 3, 2, 1],
+      [1, 2, 3, 4, 5],
+      [3, 2, 1],
+      [1],
+    ];
+
     for (let i = 0; i < tests.length; i++) {
       const list = createLinkedList(tests[i]);
-      // @ts-ignore
-      const result = (fn as Function)(list);
+      const result = fn(list);
       assert.deepStrictEqual(getListValues(result), answers[i]);
     }
+
     return true;
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
